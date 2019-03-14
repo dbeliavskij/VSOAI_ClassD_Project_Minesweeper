@@ -51,7 +51,10 @@ class StateButton (ToggleButtonBehavior, Image):
             self.source = 'MINESWEEPER_0.png' 
 
 
-class MyApp(App):
+class MinesweeperApp(App):
+
+    icon='Minesweeper_icon.png'
+
     def build(self):
 
         layout = BoxLayout(orientation='horizontal', spacing = 10)
@@ -68,4 +71,4 @@ class MyApp(App):
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    MinesweeperApp().run()
