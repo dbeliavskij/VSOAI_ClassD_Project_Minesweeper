@@ -5,14 +5,14 @@ from kivy.uix.image import Image
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.boxlayout import BoxLayout
+from kivy.core.window import Window
 
+Window.clearcolor = (0.66, 0.87, 0.96, 0)
 
 flagmode = False
 
 def changemode():
-
     global flagmode
-
     flagmode=not flagmode
 
 class Tile (ToggleButtonBehavior, Image):
@@ -32,16 +32,13 @@ class Tile (ToggleButtonBehavior, Image):
             self.source = 'MINESWEEPER_0.png'
 
 class StateButton (ToggleButtonBehavior, Image):
-
     def __init__(self):
         super().__init__()
         self.source = 'MINESWEEPER_0.png'
         self.allow_stretch = True
         self.size = (90, 50)
         self.size_hint = (None, None)
-        self.pos_hint = {'center_y':0.5}
-        
-    
+        self.pos_hint = {'center_y':0.5}           
     def on_state (self, widget, value):
         if value=='down':
             self.source = 'MINESWEEPER_F.png'
@@ -50,25 +47,18 @@ class StateButton (ToggleButtonBehavior, Image):
             changemode()
             self.source = 'MINESWEEPER_0.png' 
 
-
 class MinesweeperApp(App):
-
     icon='Minesweeper_icon.png'
-
     def build(self):
-
-        layout = BoxLayout(orientation='horizontal', spacing = 10)
-
-        playfield = GridLayout(rows=8, size_hint=(0.8, 1))
+        layout = BoxLayout(orientation='horizontal', spacing = 10, padding=10)
+        playfield = GridLayout(rows=8, size_hint=(0.8, 1))        
         for a in range (64):
-            playfield.add_widget(Tile())
-        
+            playfield.add_widget(Tile())        
         btmode = StateButton()
         layout.add_widget(playfield)
         layout.add_widget(btmode)
 
         return layout
-
 
 if __name__ == '__main__':
     MinesweeperApp().run()
