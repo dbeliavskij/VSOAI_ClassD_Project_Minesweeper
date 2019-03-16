@@ -7,6 +7,8 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.config import Config
+from kivy.properties import DictProperty
+
 
 Config.set('graphics', 'resizable', '0')
 Config.set('graphics', 'width', '700')
@@ -23,19 +25,26 @@ def changemode():
 
 class Tile (ToggleButtonBehavior, Image):
 
-    def __init__(self):
+    coord=DictProperty({'x':0, 'y':0})
+
+    def __init__(self, cols=0, rows=0):
         super().__init__()
         self.source='MINESWEEPER_X.png'
         self.allow_stretch=True
         self.keep_ratio=False
+        self.coord['x']=cols
+        self.coord['y']=rows
         
     def on_state(self, widget, value):
         if self.source=='MINESWEEPER_X.png' and flagmode==True:
             self.source = 'MINESWEEPER_F.png'
+            print(self.coord)
         elif self.source=='MINESWEEPER_F.png':
             self.source = 'MINESWEEPER_X.png'
+            print(self.coord)
         elif self.source=='MINESWEEPER_X.png' and flagmode==False:
-            self.source = 'MINESWEEPER_0.png' 
+            self.source = 'MINESWEEPER_0.png'
+            print(self.coord) 
 
 class StateButton (ToggleButtonBehavior, Image):
     def __init__(self):
@@ -58,8 +67,9 @@ class MinesweeperApp(App):
     def build(self):
         layout = BoxLayout(orientation='horizontal', spacing = 10, padding=10)
         playfield = GridLayout(rows=8, size_hint=(0.8, 1))       
-        for a in range (64):
-            playfield.add_widget(Tile())        
+        for cols in range(1,9):
+            for rows in range(1,9):
+                playfield.add_widget(Tile(rows, cols))        
         btmode = StateButton()
         layout.add_widget(playfield)
         layout.add_widget(btmode)
