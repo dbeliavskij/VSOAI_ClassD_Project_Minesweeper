@@ -1,6 +1,4 @@
-# VSOAI_ClassD_Project_Minesweeper
-Final Project for D class of Vilnius School of AI
-
+# Minesweeper. VSOAI Class D Project
 ## Description
 
 
