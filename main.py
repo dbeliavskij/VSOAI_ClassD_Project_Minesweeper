@@ -1,8 +1,7 @@
-# from UI import MinesweeperApp
 from field_gen import field_gen
+import config
+from UI import MinesweeperApp
 
 if __name__ == '__main__':
-    fld = field_gen(5, 2)
-    for i in fld:
-        print(i)
-    # MinesweeperApp().run()
+    config.field = field_gen(config.size)
+    MinesweeperApp().run()

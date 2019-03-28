@@ -1,5 +1,5 @@
 import random
-
+from config import field
 
 def field_gen(size, level=1):
     field = [[0 for x in range(size)] for y in range(size)]
@@ -44,11 +44,8 @@ def zone(field, x, y, size):
         for warningy in range(area_y[0], area_y[1]):
             for warningx in range(area_x[0], area_x[1]):
                 if field[y+warningy][x+warningx] != -1:
-                    field[y+warningy][x+warningx] = field[y + warningy]
-                    [x + warningx] + 1
-                    print('Warning generated in:', x+warningx, y+warningy,
-                          'Field value: ', field[y+warningy][x+warningx],
-                          'For mine in:', x, y)
+                    field[y+warningy][x+warningx] = field[y + warningy][x + warningx] + 1
+
     except IndexError:
         print("Failure", y, x)
     return field

@@ -6,7 +6,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.config import Config
 from kivy.properties import DictProperty
-
+from kivy.uix.popup import Popup
+import config
+from field_gen import check_tile
 
 Config.set('graphics', 'resizable', '0')
 Config.set('graphics', 'width', '700')
@@ -16,6 +18,9 @@ Config.write()
 Window.clearcolor = (0.66, 0.87, 0.96, 1)
 
 flagmode = False
+
+popup = Popup(title='Test popup',size_hint=(None, None), size=(400, 400), 
+              auto_dismiss=False)
 
 
 def changemode():
@@ -43,8 +48,11 @@ class Tile (ToggleButtonBehavior, Image):
             self.source = 'MINESWEEPER_X.png'
             print(self.coord)
         elif self.source == 'MINESWEEPER_X.png' and not flagmode:
-            self.source = 'MINESWEEPER_0.png'
+            self.source = 'MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
             print(self.coord)
+        if check_tile(self.coord, config.field) == -1:
+            print('you loose')
+            popup.open()
 
 
 class StateButton (ToggleButtonBehavior, Image):
@@ -67,12 +75,12 @@ class StateButton (ToggleButtonBehavior, Image):
 
 class MinesweeperApp(App):
     icon = 'Minesweeper_icon.png'
-
+    
     def build(self):
         layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
-        playfield = GridLayout(rows=8, size_hint=(0.8, 1))
-        for cols in range(1, 9):
-            for rows in range(1, 9):
+        playfield = GridLayout(rows=config.size, size_hint=(0.8, 1))
+        for cols in range(config.size):
+            for rows in range(config.size):
                 playfield.add_widget(Tile(rows, cols))
         btmode = StateButton()
         layout.add_widget(playfield)
@@ -81,5 +89,4 @@ class MinesweeperApp(App):
         return layout
 
 
-if __name__ == '__main__':
-    MinesweeperApp().run()
+
