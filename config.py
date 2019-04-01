@@ -1,6 +1,6 @@
 
 field = []
 
-size =4
+size = 8
 
-level = 1
+level = 10

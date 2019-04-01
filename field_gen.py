@@ -1,5 +1,5 @@
 import random
-from config import field
+
 
 def field_gen(size, level=1):
     field = [[0 for x in range(size)] for y in range(size)]
