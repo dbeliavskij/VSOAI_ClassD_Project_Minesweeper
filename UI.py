@@ -31,6 +31,20 @@ class Restart(Button):
         sm.current = 'menu'
 
 
+class Win(Widget):
+    def __init__(self):
+        self.layout = BoxLayout(orientation='vertical', padding=70, spacing=20)
+        self.title = Label(text = 'You won! Congratulations!')
+        self.exit = (Button(text='Exit', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
+        ## NEVEIKIA BIND EXIT 
+        #self.exit.bind(on_press = App.get_running_app().stop())
+        self.layout.add_widget(self.exit)
+        self.pop = Popup(content=self.layout, title='CONGRATULATIONS!', separator_height=0, size_hint=(None, None), size=(400, 400), 
+                         auto_dismiss=False, background='win.jpg') #WIN nuotrauka reikia pakeisti :D
+        
+    def show(self):
+        self.pop.open()
+
 class Gameover(Widget):
     def __init__(self):
         self.layout = BoxLayout(orientation='vertical', padding=70, spacing=20)
@@ -80,9 +94,16 @@ class Tile (ToggleButtonBehavior, Image):
         elif self.source == 'MINESWEEPER_X.png' and not flagmode:
             self.source = 'MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
             print(self.coord)
-        if check_tile(self.coord, config.field) == -1 and not flagmode:
-            print('you lose')
-            Gameover.show(Gameover())
+            
+            if check_tile(self.coord, config.field) == -1 and not flagmode:
+                print('you lose')
+                Gameover.show(Gameover())
+            else:
+                config.tiles_opened = config.tiles_opened + 1
+                print(config.tiles_opened)
+            if config.tiles_opened == ((config.size ** 2) - config.bomb_amount):
+                print('You WIN!')
+                Win.show(Win())
 
 
 class StateButton (ToggleButtonBehavior, Image):
