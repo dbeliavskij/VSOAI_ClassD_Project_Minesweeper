@@ -8,11 +8,9 @@ from kivy.config import Config
 from kivy.properties import DictProperty
 from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from kivy.uix.label import Label
-from kivy.core.window import Window
 import config
 from field_gen import check_tile
 
