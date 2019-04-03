@@ -1,14 +1,15 @@
 
 field = []
 
-size = 8
+size = 4
 
-level = 2
+level = 1
 
 tiles_opened = 0
 
 bomb_amount = 0
+
 if size ** 2 <= size*level:
-        bomb_amount = size*level - size
+    bomb_amount = size*level - size
 else:
-        bomb_amount = size*level
+    bomb_amount = size*level
