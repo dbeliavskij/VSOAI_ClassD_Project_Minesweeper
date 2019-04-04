@@ -30,7 +30,8 @@ sm = ScreenManager(transition=SwapTransition())
 class Gamefield(Widget):
     def __init__(self):
         super().__init__()
-        self.layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
+        self.layout = BoxLayout(orientation='horizontal', spacing=10,
+                                padding=10)
         self.playfield = GridLayout(rows=config.size, size_hint=(0.8, 1))
         for cols in range(config.size):
             for rows in range(config.size):
@@ -53,9 +54,16 @@ class Play(Button):
         self.pos_hint = {'center_x': 0.5}
 
     def on_press(self):
+        if config.level == 3:
+            config.bomb_amount = int(config.size**2*0.5)
+        elif config.level == 2:
+            config.bomb_amount = int(config.size**2*0.3)
+        else:
+            config.bomb_amount = int(config.size**2*0.15)
         config.field = field_gen(config.size)
         gamefield.add_widget(Gamefield().layout)
         sm.current = 'gamefield'
+        print(config.field)
 
 
 class Difficulty(Button):
@@ -111,11 +119,11 @@ layoutf.add_widget(Size())
 welcome = Screen(name='welcome')
 welcome.add_widget(layoutf)
 
-menu = Screen(name='menu')
+
 
 class Restart(Button):
     def on_press(self):
-        sm.current = 'menu'
+        sm.current = 'welcome'
 
 
 class Win(Widget):
@@ -140,13 +148,10 @@ class Win(Widget):
 class Gameover(Widget):
     def __init__(self):
         super(Gameover, self).__init__()
-        self.layout = BoxLayout(orientation='vertical', padding=70, spacing=20)
+        self.layout = BoxLayout(orientation='vertical', padding=100, spacing=20)
 
         self.restart = (Restart(text='Play again!', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
         self.layout.add_widget(self.restart)
-
-        self.menu = (Button(text='Menu', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
-        self.layout.add_widget(self.menu)
 
         self.exit = (Button(text='Exit', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
         self.exit.bind(on_press=self.close)
@@ -185,13 +190,10 @@ class Tile (ToggleButtonBehavior, Image):
     def on_state(self, widget, value):
         if self.source == 'Textures/MINESWEEPER_X.png' and flagmode:
             self.source = 'Textures/MINESWEEPER_F.png'
-            print(self.coord)
         elif self.source == 'Textures/MINESWEEPER_F.png':
             self.source = 'Textures/MINESWEEPER_X.png'
-            print(self.coord)
         elif self.source == 'Textures/MINESWEEPER_X.png' and not flagmode:
             self.source = 'Textures/MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
-            print(self.coord)
 
             if check_tile(self.coord, config.field, True) == -1 and not flagmode:
                 print('you lose')
@@ -225,6 +227,5 @@ class MinesweeperApp(App):
     def build(self):
         sm.add_widget(welcome)
         sm.add_widget(gamefield)
-        sm.add_widget(menu)
 
         return sm
