@@ -62,54 +62,54 @@ class Play(Button):
             config.bomb_amount = int(config.size**2*0.15)
         config.field = field_gen(config.size)
         gamefield.add_widget(Gamefield().layout)
+        config.tiles_opened = 0
         sm.current = 'gamefield'
-        print(config.field)
 
 
 class Difficulty(Button):
     def __init__(self):
         super(Difficulty, self).__init__()
         self.text = 'Difficulty: Easy'
-        self.size_hint= (None, None)
+        self.size_hint = (None, None)
         self.width = 200
         self.height = 50
         self.pos_hint = {'center_x': 0.5}
 
     def on_press(self):
-        if self.text=='Easy' or self.text=='Difficulty: Easy':
-            self.text='Normal'
-            config.level=2
+        if self.text == 'Easy' or self.text == 'Difficulty: Easy':
+            self.text = 'Normal'
+            config.level = 2
 
-        elif self.text=='Normal':
-            self.text='Hard'
-            config.level=3
+        elif self.text == 'Normal':
+            self.text = 'Hard'
+            config.level = 3
 
         else:
-            self.text='Easy'
-            config.level=1
+            self.text = 'Easy'
+            config.level = 1
 
 
 class Size(Button):
     def __init__(self):
         super(Size, self).__init__()
         self.text = 'Size: Small'
-        self.size_hint=(None, None)
-        self.width=200
-        self.height=50
-        self.pos_hint={'center_x': 0.5}
+        self.size_hint = (None, None)
+        self.width = 200
+        self.height = 50
+        self.pos_hint = {'center_x': 0.5}
 
     def on_press(self):
-        if self.text=='Small' or self.text=='Size: Small':
-            self.text='Normal'
-            config.size=8
+        if self.text == 'Small' or self.text == 'Size: Small':
+            self.text = 'Normal'
+            config.size = 8
 
-        elif self.text=='Normal':
-            self.text='Big'
-            config.size=16
+        elif self.text == 'Normal':
+            self.text = 'Big'
+            config.size = 16
 
         else:
-            self.text='Small'
-            config.size=4
+            self.text = 'Small'
+            config.size = 4
 
 
 layoutf = BoxLayout(orientation='vertical', spacing=20, padding=100)
@@ -118,7 +118,6 @@ layoutf.add_widget(Difficulty())
 layoutf.add_widget(Size())
 welcome = Screen(name='welcome')
 welcome.add_widget(layoutf)
-
 
 
 class Restart(Button):
@@ -131,11 +130,24 @@ class Win(Widget):
         super(Win, self).__init__()
         self.layout = BoxLayout(orientation='vertical', padding=70, spacing=20)
 
-        self.title = Label(text="You WIN!", bold=True, font_size=35, outline_width=5, outline_color=(125, 125, 125))
+        self.title = Label(text="You WIN!", bold=True, font_size=35,
+                           outline_width=5, outline_color=(125, 125, 125))
         self.layout.add_widget(self.title)
 
-        self.pop = Popup(content=self.layout, title='CONGRATULATIONS!', separator_height=0, size_hint=(None, None),
+        self.restart = (Restart(text='Play again!', size_hint=(None, None),
+                        width=200, height=50, pos_hint={'center_x': 0.5}))
+
+        self.layout.add_widget(self.restart)
+
+        self.exit = (Button(text='Exit', size_hint=(None, None), width=200,
+                     height=50, pos_hint={'center_x': 0.5}))
+        self.exit.bind(on_press=self.close)
+        self.layout.add_widget(self.exit)
+
+        self.pop = Popup(content=self.layout, title='CONGRATULATIONS!',
+                         separator_height=0, size_hint=(None, None),
                          size=(400, 400), auto_dismiss=False)
+        self.restart.bind(on_press=self.pop.dismiss)
 
     def show(self):
         self.pop.open()
@@ -148,17 +160,22 @@ class Win(Widget):
 class Gameover(Widget):
     def __init__(self):
         super(Gameover, self).__init__()
-        self.layout = BoxLayout(orientation='vertical', padding=100, spacing=20)
+        self.layout = BoxLayout(orientation='vertical', padding=100,
+                                spacing=20)
 
-        self.restart = (Restart(text='Play again!', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
+        self.restart = (Restart(text='Play again!', size_hint=(None, None),
+                        width=200, height=50, pos_hint={'center_x': 0.5}))
         self.layout.add_widget(self.restart)
 
-        self.exit = (Button(text='Exit', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
+        self.exit = (Button(text='Exit', size_hint=(None, None), width=200,
+                     height=50, pos_hint={'center_x': 0.5}))
         self.exit.bind(on_press=self.close)
         self.layout.add_widget(self.exit)
 
-        self.pop = Popup(content=self.layout, title='', separator_height=0, size_hint=(None, None), size=(400, 400),
-                         auto_dismiss=False, background='Textures/MINESWEEPER_-1.png')
+        self.pop = Popup(content=self.layout, title='Better luck next time!',
+                         separator_height=0, size_hint=(None, None),
+                         size=(400, 400), auto_dismiss=False,
+                         background='Textures/MINESWEEPER_-1.png')
 
         self.restart.bind(on_press=self.pop.dismiss)
 
@@ -193,13 +210,12 @@ class Tile (ToggleButtonBehavior, Image):
         elif self.source == 'Textures/MINESWEEPER_F.png':
             self.source = 'Textures/MINESWEEPER_X.png'
         elif self.source == 'Textures/MINESWEEPER_X.png' and not flagmode:
-            self.source = 'Textures/MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
+            self.source = 'Textures/MINESWEEPER_' + str(check_tile(self.coord,
+                                                        config.field)) + '.png'
 
             if check_tile(self.coord, config.field, True) == -1 and not flagmode:
-                print('you lose')
                 Gameover.show(Gameover())
             elif config.tiles_opened == ((config.size ** 2) - config.bomb_amount):
-                print('You WIN!')
                 Win.show(Win())
 
 
