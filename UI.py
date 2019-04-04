@@ -27,7 +27,7 @@ sm = ScreenManager(transition=SwapTransition())
 welcome = Screen(name='welcome')
 
 
-class first_screen(Button):
+class first_screen(Button): #cia iki 42 eilutes vyksta pirmas ekranas. Isliek savo fantazija :D galim pridet koki nors inputa?
     def __init__(self):
         super(first_screen, self).__init__()
         self.text = "Play the game!"
@@ -127,7 +127,7 @@ class Tile (ToggleButtonBehavior, Image):
 
             if check_tile(self.coord, config.field, True) == -1 and not flagmode:
                 print('you lose')
-                Win.show(Win())
+                Gameover.show(Gameover())
             elif config.tiles_opened == ((config.size ** 2) - config.bomb_amount):
                 print('You WIN!')
                 Win.show(Win())
