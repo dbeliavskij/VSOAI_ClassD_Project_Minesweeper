@@ -85,7 +85,7 @@ class Gameover(Widget):
         self.layout.add_widget(self.exit)
 
         self.pop = Popup(content=self.layout, title='', separator_height=0, size_hint=(None, None), size=(400, 400),
-                         auto_dismiss=False, background='MINESWEEPER_-1.png')
+                         auto_dismiss=False, background='Textures/MINESWEEPER_-1.png')
 
         self.restart.bind(on_press=self.pop.dismiss)
 
@@ -108,21 +108,21 @@ class Tile (ToggleButtonBehavior, Image):
 
     def __init__(self, cols=0, rows=0):
         super().__init__()
-        self.source = 'MINESWEEPER_X.png'
+        self.source = 'Textures/MINESWEEPER_X.png'
         self.allow_stretch = True
         self.keep_ratio = False
         self.coord['x'] = cols
         self.coord['y'] = rows
 
     def on_state(self, widget, value):
-        if self.source == 'MINESWEEPER_X.png' and flagmode:
-            self.source = 'MINESWEEPER_F.png'
+        if self.source == 'Textures/MINESWEEPER_X.png' and flagmode:
+            self.source = 'Textures/MINESWEEPER_F.png'
             print(self.coord)
-        elif self.source == 'MINESWEEPER_F.png':
-            self.source = 'MINESWEEPER_X.png'
+        elif self.source == 'Textures/MINESWEEPER_F.png':
+            self.source = 'Textures/MINESWEEPER_X.png'
             print(self.coord)
-        elif self.source == 'MINESWEEPER_X.png' and not flagmode:
-            self.source = 'MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
+        elif self.source == 'Textures/MINESWEEPER_X.png' and not flagmode:
+            self.source = 'Textures/MINESWEEPER_' + str(check_tile(self.coord, config.field)) + '.png'
             print(self.coord)
 
             if check_tile(self.coord, config.field, True) == -1 and not flagmode:
@@ -136,7 +136,7 @@ class Tile (ToggleButtonBehavior, Image):
 class StateButton (ToggleButtonBehavior, Image):
     def __init__(self):
         super().__init__()
-        self.source = 'MINESWEEPER_0.png'
+        self.source = 'Textures/MINESWEEPER_0.png'
         self.allow_stretch = True
         self.size = (90, 50)
         self.size_hint = (None, None)
@@ -144,11 +144,11 @@ class StateButton (ToggleButtonBehavior, Image):
 
     def on_state(self, widget, value):
         if value == 'down':
-            self.source = 'MINESWEEPER_F.png'
+            self.source = 'Textures/MINESWEEPER_F.png'
             changemode()
         else:
             changemode()
-            self.source = 'MINESWEEPER_0.png'
+            self.source = 'Textures/MINESWEEPER_0.png'
 
 
 layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
@@ -166,7 +166,7 @@ menu = Screen(name='menu')
 
 
 class MinesweeperApp(App):
-    icon = 'Minesweeper_icon.png'
+    icon = 'Textures/Minesweeper_icon.png'
 
     def build(self):
         sm.add_widget(welcome)
