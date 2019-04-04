@@ -12,6 +12,7 @@ def field_gen(size):
                 field[y][x] = -1
                 break
     look_bomb(field, size)
+
     return field
 
 
