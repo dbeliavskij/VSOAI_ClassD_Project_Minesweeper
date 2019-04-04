@@ -13,6 +13,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from kivy.uix.label import Label
 import config
 from field_gen import check_tile
+from field_gen import field_gen
 
 Config.set('graphics', 'resizable', '0')
 Config.set('graphics', 'width', '700')
@@ -24,22 +25,93 @@ Window.clearcolor = (0.66, 0.87, 0.96, 1)
 flagmode = False
 
 sm = ScreenManager(transition=SwapTransition())
-welcome = Screen(name='welcome')
 
 
-class first_screen(Button): #cia iki 42 eilutes vyksta pirmas ekranas. Isliek savo fantazija :D galim pridet koki nors inputa?
+class Gamefield(Widget):
     def __init__(self):
-        super(first_screen, self).__init__()
+        super().__init__()
+        self.layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
+        self.playfield = GridLayout(rows=config.size, size_hint=(0.8, 1))
+        for cols in range(config.size):
+            for rows in range(config.size):
+                self.playfield.add_widget(Tile(rows, cols))
+        self.btmode = StateButton()
+        self.layout.add_widget(self.playfield)
+        self.layout.add_widget(self.btmode)
+
+
+gamefield = Screen(name='gamefield')
+
+
+class Play(Button):
+    def __init__(self):
+        super(Play, self).__init__()
         self.text = "Play the game!"
-        self.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
-        self.size_hint = (0.2, 0.2)
+        self.size_hint = (None, None)
+        self.width = 200
+        self.height = 50
+        self.pos_hint = {'center_x': 0.5}
 
     def on_press(self):
+        config.field = field_gen(config.size)
+        gamefield.add_widget(Gamefield().layout)
         sm.current = 'gamefield'
 
 
-welcome.add_widget(first_screen())
+class Difficulty(Button):
+    def __init__(self):
+        super(Difficulty, self).__init__()
+        self.text = 'Difficulty: Easy'
+        self.size_hint= (None, None)
+        self.width = 200
+        self.height = 50
+        self.pos_hint = {'center_x': 0.5}
 
+    def on_press(self):
+        if self.text=='Easy' or self.text=='Difficulty: Easy':
+            self.text='Normal'
+            config.level=2
+
+        elif self.text=='Normal':
+            self.text='Hard'
+            config.level=3
+
+        else:
+            self.text='Easy'
+            config.level=1
+
+
+class Size(Button):
+    def __init__(self):
+        super(Size, self).__init__()
+        self.text = 'Size: Small'
+        self.size_hint=(None, None)
+        self.width=200
+        self.height=50
+        self.pos_hint={'center_x': 0.5}
+
+    def on_press(self):
+        if self.text=='Small' or self.text=='Size: Small':
+            self.text='Normal'
+            config.size=8
+
+        elif self.text=='Normal':
+            self.text='Big'
+            config.size=16
+
+        else:
+            self.text='Small'
+            config.size=4
+
+
+layoutf = BoxLayout(orientation='vertical', spacing=20, padding=100)
+layoutf.add_widget(Play())
+layoutf.add_widget(Difficulty())
+layoutf.add_widget(Size())
+welcome = Screen(name='welcome')
+welcome.add_widget(layoutf)
+
+menu = Screen(name='menu')
 
 class Restart(Button):
     def on_press(self):
@@ -53,10 +125,6 @@ class Win(Widget):
 
         self.title = Label(text="You WIN!", bold=True, font_size=35, outline_width=5, outline_color=(125, 125, 125))
         self.layout.add_widget(self.title)
-
-        self.exit = (Button(text='Exit', size_hint=(None, None), width=200, height=50, pos_hint={'center_x': 0.5}))
-        self.exit.bind(on_press=self.close)
-        self.layout.add_widget(self.exit)
 
         self.pop = Popup(content=self.layout, title='CONGRATULATIONS!', separator_height=0, size_hint=(None, None),
                          size=(400, 400), auto_dismiss=False)
@@ -149,20 +217,6 @@ class StateButton (ToggleButtonBehavior, Image):
         else:
             changemode()
             self.source = 'Textures/MINESWEEPER_0.png'
-
-
-layout = BoxLayout(orientation='horizontal', spacing=10, padding=10)
-playfield = GridLayout(rows=config.size, size_hint=(0.8, 1))
-for cols in range(config.size):
-    for rows in range(config.size):
-        playfield.add_widget(Tile(rows, cols))
-btmode = StateButton()
-layout.add_widget(playfield)
-layout.add_widget(btmode)
-gamefield = Screen(name='gamefield')
-gamefield.add_widget(layout)
-
-menu = Screen(name='menu')
 
 
 class MinesweeperApp(App):
