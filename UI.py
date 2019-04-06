@@ -172,7 +172,7 @@ class Gameover(Widget):
         self.exit.bind(on_press=self.close)
         self.layout.add_widget(self.exit)
 
-        self.pop = Popup(content=self.layout, title='Better luck next time!',
+        self.pop = Popup(content=self.layout, title='',
                          separator_height=0, size_hint=(None, None),
                          size=(400, 400), auto_dismiss=False,
                          background='Textures/MINESWEEPER_-1.png')
@@ -215,7 +215,8 @@ class Tile (ToggleButtonBehavior, Image):
 
             if check_tile(self.coord, config.field, True) == -1 and not flagmode:
                 Gameover.show(Gameover())
-            elif config.tiles_opened == ((config.size ** 2) - config.bomb_amount):
+            elif config.tiles_opened == ((config.size ** 2)
+                                         - config.bomb_amount):
                 Win.show(Win())
 
 
