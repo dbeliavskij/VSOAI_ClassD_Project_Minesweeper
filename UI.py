@@ -29,7 +29,7 @@ sm = ScreenManager(transition=SwapTransition())
 
 class Gamefield(Widget):
     def __init__(self):
-        super().__init__()
+        super(Gamefield, self).__init__()
         self.layout = BoxLayout(orientation='horizontal', spacing=10,
                                 padding=10)
         self.playfield = GridLayout(rows=config.size, size_hint=(0.8, 1))
@@ -197,7 +197,7 @@ class Tile (ToggleButtonBehavior, Image):
     coord = DictProperty({'x': 0, 'y': 0})
 
     def __init__(self, cols=0, rows=0):
-        super().__init__()
+        super(Tile, self).__init__()
         self.source = 'Textures/MINESWEEPER_X.png'
         self.allow_stretch = True
         self.keep_ratio = False
@@ -222,7 +222,7 @@ class Tile (ToggleButtonBehavior, Image):
 
 class StateButton (ToggleButtonBehavior, Image):
     def __init__(self):
-        super().__init__()
+        super(StateButton, self).__init__()
         self.source = 'Textures/MINESWEEPER_0.png'
         self.allow_stretch = True
         self.size = (90, 50)
